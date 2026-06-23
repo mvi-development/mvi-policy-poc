@@ -2,7 +2,6 @@ name: 정책 변경 요청
 
 description: GitHub 운영 정책, 권한, 비용, 보류 항목 변경을 요청합니다.
 title: "[Policy] "
-labels: ["policy"]
 body:
   - type: textarea
     id: request
