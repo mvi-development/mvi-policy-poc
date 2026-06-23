@@ -20,14 +20,26 @@ jobs:
       - name: Check required governance files
         run: |
           set -euo pipefail
-          test -s README.md
-          test -s CONTRIBUTING.md
-          test -s .github/pull_request_template.md
-          test -s docs/free-tier-governance.md
+          required_files=(
+            "README.md"
+            "CONTRIBUTING.md"
+            ".github/pull_request_template.md"
+            ".github/ISSUE_TEMPLATE/policy-change.yml"
+            "docs/free-tier-governance.md"
+          )
+
+          for file in "${required_files[@]}"; do
+            if [ ! -s "$file" ]; then
+              echo "Missing or empty required file: $file" >&2
+              exit 1
+            fi
+          done
 
       - name: Check Free tier decision language
         run: |
           set -euo pipefail
-          grep -q 'Free 티어' docs/free-tier-governance.md
-          grep -q 'private repository' docs/free-tier-governance.md
-          grep -q 'Protected Branch' docs/free-tier-governance.md
+          doc="docs/free-tier-governance.md"
+
+          grep -Eq 'Free 티어|Free tier' "$doc"
+          grep -Eq 'private repository|private repo' "$doc"
+          grep -Eq 'Protected Branch|branch protection|Ruleset' "$doc"
